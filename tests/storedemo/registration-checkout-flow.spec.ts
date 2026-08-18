@@ -92,11 +92,11 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
     });
 
     await test.step('8. Change the quantity to 2', async () => {
-      await cartDrawer.setQuantity(2);
+      await cartDrawer.setQuantity(3);
     });
 
     await test.step('9. Calculate the expected subtotal as Unit Price x 2 and verify it against the cart value', async () => {
-      const expectedSubtotal = unitPrice * 2;
+      const expectedSubtotal = unitPrice * 3;
       expect(await cartDrawer.getSubtotal()).toBe(expectedSubtotal);
     });
 

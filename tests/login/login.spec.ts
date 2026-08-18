@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/test.fixture';
-import { validUser } from '../../utils/testData';
+import { validUser, hasHerokuCredentials } from '../../utils/testData';
 import { Messages, Tags } from '../../constants/testConstants';
 import { negativeLoginCases } from './login.data';
 
@@ -7,6 +7,11 @@ test.describe('Login', () => {
   // The other projects reuse a logged-in storageState (see auth.setup.ts),
   // but a login-flow test must start unauthenticated regardless of that.
   test.use({ storageState: { cookies: [], origins: [] } });
+
+  test.skip(
+    !hasHerokuCredentials,
+    'TEST_USERNAME/TEST_PASSWORD not set — herokuapp login suite is disabled.',
+  );
 
   test.beforeEach(async ({ loginPage }) => {
     await loginPage.goto();
@@ -57,6 +62,11 @@ test.describe('Login - session handling', () => {
     loginPage,
     homePage,
   }) => {
+    test.skip(
+      !hasHerokuCredentials,
+      'TEST_USERNAME/TEST_PASSWORD not set — herokuapp login suite is disabled.',
+    );
+
     await loginPage.goto();
     await loginPage.login(validUser.username, validUser.password);
     await expect(homePage.heading).toBeVisible();

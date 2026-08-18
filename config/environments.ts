@@ -32,8 +32,15 @@ export interface Environment {
   name: EnvironmentName;
   baseURL: string;
   apiBaseURL: string;
-  username: string;
-  password: string;
+  /**
+   * Static test-account credentials for the herokuapp login suite
+   * (tests/login, tests/setup/auth.setup.ts). Optional: that app has no
+   * registration flow of its own, so it's the only fixture still backed by
+   * a fixed account. Tests that need it skip themselves (with a clear
+   * reason) when it isn't configured — see auth.setup.ts / login.spec.ts.
+   */
+  username?: string;
+  password?: string;
   apiKey?: string;
   headless: boolean;
   /** Base URL for the TestDino Demo Store scenario (tests/storedemo). */
@@ -44,8 +51,8 @@ export const environment: Environment = {
   name: testEnv,
   baseURL: required('BASE_URL'),
   apiBaseURL: required('API_BASE_URL'),
-  username: required('TEST_USERNAME'),
-  password: required('TEST_PASSWORD'),
+  username: process.env.TEST_USERNAME || undefined,
+  password: process.env.TEST_PASSWORD || undefined,
   apiKey: process.env.API_KEY || undefined,
   headless: process.env.HEADLESS !== 'false',
   storedemoBaseURL: required('STOREDEMO_BASE_URL'),

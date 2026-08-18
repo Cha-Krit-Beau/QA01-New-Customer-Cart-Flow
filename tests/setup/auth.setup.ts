@@ -1,5 +1,5 @@
 import { test as setup, expect } from '../../fixtures/test.fixture';
-import { validUser } from '../../utils/testData';
+import { validUser, hasHerokuCredentials } from '../../utils/testData';
 
 /**
  * Runs once before the other projects (see the `setup` project /
@@ -11,6 +11,11 @@ import { validUser } from '../../utils/testData';
 const authFile = 'auth/user.json';
 
 setup('authenticate', async ({ page, loginPage, homePage }) => {
+  setup.skip(
+    !hasHerokuCredentials,
+    'TEST_USERNAME/TEST_PASSWORD not set — herokuapp login suite is disabled.',
+  );
+
   await loginPage.goto();
   await loginPage.login(validUser.username, validUser.password);
 

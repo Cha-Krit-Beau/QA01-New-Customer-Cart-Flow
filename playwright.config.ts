@@ -8,6 +8,15 @@ import { testConfig } from './config/testConfig';
  * config/environments.ts, loaded from .env.<TEST_ENV>. Run-behaviour values
  * (timeouts, retries) live in config/testConfig.ts.
  */
+// The herokuapp demo site has no registration flow, so its login suite
+// (tests/login, tests/setup/auth.setup.ts, and everything that depends on
+// the shared auth/user.json session) still needs a fixed TEST_USERNAME/
+// TEST_PASSWORD. That pair is optional now — when it's absent, exclude
+// those projects' tests entirely instead of crashing on a missing
+// auth/user.json (which auth.setup.ts skips writing when unset).
+const hasHerokuCredentials = Boolean(environment.username && environment.password);
+const herokuTestIgnore = hasHerokuCredentials ? /storedemo/ : /.*/;
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
@@ -45,21 +54,21 @@ export default defineConfig({
     {
       name: 'chromium',
       testMatch: /.*\.spec\.ts/,
-      testIgnore: /storedemo/,
+      testIgnore: herokuTestIgnore,
       use: { ...devices['Desktop Chrome'], storageState: 'auth/user.json' },
       dependencies: ['setup'],
     },
     {
       name: 'firefox',
       testMatch: /.*\.spec\.ts/,
-      testIgnore: /storedemo/,
+      testIgnore: herokuTestIgnore,
       use: { ...devices['Desktop Firefox'], storageState: 'auth/user.json' },
       dependencies: ['setup'],
     },
     {
       name: 'webkit',
       testMatch: /.*\.spec\.ts/,
-      testIgnore: /storedemo/,
+      testIgnore: herokuTestIgnore,
       use: { ...devices['Desktop Safari'], storageState: 'auth/user.json' },
       dependencies: ['setup'],
     },
