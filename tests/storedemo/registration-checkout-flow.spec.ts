@@ -23,24 +23,14 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
     productDetailPage,
     cartDrawer,
   }) => {
-    // This test intentionally paces itself (see `pace()` below) so a headed
-    // run stays watchable step-by-step. That eats into the default per-test
-    // timeout, so mark it slow (3x testConfig.timeout.test) to compensate —
-    // remove both `pace()` and this once the debugging pass is done.
-    test.slow();
-
     const customer = buildNewCustomer();
     let productName = '';
     let unitPrice = 0;
-
-    /** Fixed pause between steps, for visually following a headed run — not a wait-for-condition. */
-    const pace = () => page.waitForTimeout(2000);
 
     await test.step('1. Open https://storedemo.testdino.com', async () => {
       await page.goto('/');
       await expect(page.locator('[data-testid="home-page"]')).toBeVisible();
     });
-    await pace();
 
     await test.step('2. Register a new customer account using a unique email address', async () => {
       await registerPage.goto();
@@ -55,7 +45,6 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
         timeout: testConfig.timeout.navigation,
       });
     });
-    await pace();
 
     await test.step('3. Verify that registration/login is successful and that the authenticated user state is visible', async () => {
       await storeLoginPage.login(customer.email, customer.password);
@@ -70,7 +59,6 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
       );
       await expect(accountPage.profileEmail).toContainText(customer.email);
     });
-    await pace();
 
     await test.step('4. Navigate to the product catalog and search for one available product', async () => {
       await catalogPage.goto();
@@ -81,7 +69,6 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
       await catalogPage.searchFor(productName);
       await expect(catalogPage.resultsCount).toContainText('1');
     });
-    await pace();
 
     await test.step('5. Open the product detail page and capture the product name and unit price from the UI', async () => {
       await catalogPage.openProduct(productName);
@@ -91,32 +78,27 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
       unitPrice = await productDetailPage.getUnitPrice();
       expect(unitPrice).toBeGreaterThan(0);
     });
-    await pace();
 
     await test.step('6. Add the product to the cart and open the cart', async () => {
       await productDetailPage.addToCart();
       await header.openCart();
       await cartDrawer.waitUntilOpen();
     });
-    await pace();
 
     await test.step('7. Verify the product name, unit price, and initial quantity', async () => {
       expect(await cartDrawer.getItemName()).toBe(productName);
       expect(await cartDrawer.getItemUnitPrice()).toBe(unitPrice);
       expect(await cartDrawer.getItemQuantity()).toBe(1);
     });
-    await pace();
 
     await test.step('8. Change the quantity to 2', async () => {
       await cartDrawer.setQuantity(2);
     });
-    await pace();
 
     await test.step('9. Calculate the expected subtotal as Unit Price x 2 and verify it against the cart value', async () => {
       const expectedSubtotal = unitPrice * 2;
       expect(await cartDrawer.getSubtotal()).toBe(expectedSubtotal);
     });
-    await pace();
 
     await test.step('10. Log out and verify that the authenticated session is cleared', async () => {
       // Close the drawer first so its overlay can't intercept the header click.
