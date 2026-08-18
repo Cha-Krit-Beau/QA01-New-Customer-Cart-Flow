@@ -1,0 +1,7 @@
+{
+  "sampleUsers": [
+    { "id": 1, "name": "Emma Wong", "job": "QA Engineer" },
+    { "id": 2, "name": "Noppon Suriya", "job": "Automation Engineer" },
+    { "id": 3, "name": "Alex Chen", "job": "Test Lead" }
+  ]
+}

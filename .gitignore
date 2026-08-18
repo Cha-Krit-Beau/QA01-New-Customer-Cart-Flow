@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Auth / storage state - never commit a logged-in session
+/auth/*.json
+
+# Environment files - never commit real credentials, only .env.example
+.env
+.env.*
+!.env.example
+
+# Build / editor
+*.log
+.DS_Store
+.vscode/*
+!.vscode/extensions.json

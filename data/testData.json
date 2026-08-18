@@ -1,0 +1,7 @@
+{
+  "loginNegativeCases": [
+    { "case": "invalid_username", "username": "not_a_real_user", "expectedMessageContains": "username is invalid" },
+    { "case": "invalid_password", "username": "tomsmith", "expectedMessageContains": "password is invalid" },
+    { "case": "empty_credentials", "username": "", "expectedMessageContains": "username is invalid" }
+  ]
+}
