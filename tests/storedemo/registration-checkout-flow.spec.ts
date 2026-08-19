@@ -96,6 +96,10 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
     });
 
     await test.step('9. Calculate the expected subtotal as Unit Price x 2 and verify it against the cart value', async () => {
+      // Fixed pacing delay: give the cart drawer time to recompute the
+      // subtotal after the quantity change in step 8 before reading it.
+      await page.waitForTimeout(2_000);
+
       const expectedSubtotal = unitPrice * 3;
       expect(await cartDrawer.getSubtotal()).toBe(expectedSubtotal);
     });
