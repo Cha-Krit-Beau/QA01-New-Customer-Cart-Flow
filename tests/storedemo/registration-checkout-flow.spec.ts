@@ -92,7 +92,7 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
     });
 
     await test.step('8. Change the quantity to 2', async () => {
-      await cartDrawer.setQuantity(3);
+      await cartDrawer.setQuantity(2);
     });
 
     await test.step('9. Calculate the expected subtotal as Unit Price x 2 and verify it against the cart value', async () => {
@@ -100,7 +100,7 @@ test.describe('TestDino Demo Store - registration to checkout journey', () => {
       // subtotal after the quantity change in step 8 before reading it.
       await page.waitForTimeout(2_000);
 
-      const expectedSubtotal = unitPrice * 3;
+      const expectedSubtotal = unitPrice * 2;
       expect(await cartDrawer.getSubtotal()).toBe(expectedSubtotal);
     });
 
